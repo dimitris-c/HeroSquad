@@ -1,4 +1,5 @@
 import UIKit
+import RxSwift
 
 final class AppController {
     
@@ -19,6 +20,13 @@ final class AppController {
     // MARK: Private
     
     func buildMain() -> UIViewController {
-        return UIViewController()
+        let credentials = MarvelAPICredentials(timestamp: { String(Int(Date().timeIntervalSince1970)) },
+                                               apiKey: MarvelAPIConfig.apiKey,
+                                               privateKey: MarvelAPIConfig.privateKey)
+        let marvelAPIClient = MarvelAPIClient(networking: self.container.networkingClient,
+                                              credentials: credentials,
+                                              baseURL: MarvelAPIConfig.gateway.baseURL!)
+        let heroesWireframe = HeroesWireframe(marvelApiClient: marvelAPIClient)
+        return heroesWireframe.prepareModule()
     }
 }

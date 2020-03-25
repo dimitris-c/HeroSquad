@@ -1,4 +1,6 @@
 import Foundation
+import RxSwift
+import RxCocoa
 
 enum NetworkError: Error, Equatable {
     case unknown
@@ -9,6 +11,8 @@ enum NetworkError: Error, Equatable {
 
 protocol NetworkingSession {
     func response(request: URLRequest, completion: @escaping (Result<(response: HTTPURLResponse, data: Data), Error>) -> Void)
+    
+    func response(request: URLRequest) -> Observable<(response: HTTPURLResponse, data: Data)>
 }
 
 extension URLSession: NetworkingSession {
@@ -27,5 +31,9 @@ extension URLSession: NetworkingSession {
         }
         
         task.resume()
+    }
+    
+    func response(request: URLRequest) -> Observable<(response: HTTPURLResponse, data: Data)> {
+        return self.rx.response(request: request)
     }
 }

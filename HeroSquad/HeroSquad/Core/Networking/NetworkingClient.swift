@@ -1,8 +1,12 @@
 import Foundation
+import RxSwift
 
 typealias NetworkCompletion<Response> = (Result<(response: HTTPURLResponse, result: Response), Error>) -> Void
 protocol Networking {
     func request<Response>(_ endpoint: Endpoint<Response>, baseURL: URL, completion: @escaping NetworkCompletion<Response>)
+    // MARK: Reactive
+    func request<Response>(_ endpoint: Endpoint<Response>, baseURL: URL) -> Single<(response: HTTPURLResponse, result: Response)>
+    func request<Response>(_ endpoint: Endpoint<Response>, baseURL: URL) -> Observable<(response: HTTPURLResponse, result: Response)>
 }
 
 final class NetworkingClient: Networking {
@@ -31,6 +35,20 @@ final class NetworkingClient: Networking {
             }
         }
         
+    }
+    
+    // MARK: Reactive
+    
+    func request<Response>(_ endpoint: Endpoint<Response>, baseURL: URL) -> Observable<(response: HTTPURLResponse, result: Response)> {
+        let request = self.buildRequest(endpoint: endpoint, baseURL: baseURL)
+        return self.session.response(request: request).map { (response, data) -> (HTTPURLResponse, Response) in
+            let result = try endpoint.decode(data)
+            return (response: response, result: result)
+        }
+    }
+    
+    func request<Response>(_ endpoint: Endpoint<Response>, baseURL: URL) -> Single<(response: HTTPURLResponse, result: Response)> {
+        return self.request(endpoint, baseURL: baseURL).asSingle()
     }
     
     // MARK: Private

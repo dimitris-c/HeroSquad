@@ -1,7 +1,7 @@
 import Foundation
 
 struct ComicList: Decodable {
-    let avalaible: Int
+    let available: Int
     let returned: Int
     let collectionURI: String
     let items: [ComicSummary]

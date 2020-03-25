@@ -22,6 +22,10 @@
 		B5632CE0242B8EE900171882 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5632CDF242B8EE900171882 /* Character.swift */; };
 		B5632CE2242B8F4700171882 /* MarvelImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5632CE1242B8F4700171882 /* MarvelImage.swift */; };
 		B5632CE4242B913300171882 /* Comic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5632CE3242B913300171882 /* Comic.swift */; };
+		B5632CE7242B94AB00171882 /* MarvelAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5632CE6242B94AB00171882 /* MarvelAPIClient.swift */; };
+		B5632CE9242B955C00171882 /* MarvelAPICredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5632CE8242B955C00171882 /* MarvelAPICredentials.swift */; };
+		B5632D81242B982700171882 /* String+Crypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5632D80242B982700171882 /* String+Crypto.swift */; };
+		B5632D83242BB3FF00171882 /* MarvelAPIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5632D82242BB3FF00171882 /* MarvelAPIConstants.swift */; };
 		E1DAD05E03D9CE5B7C62B301 /* Pods_HeroSquadTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DD5B0D57AB143D0587D7EC1 /* Pods_HeroSquadTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +62,10 @@
 		B5632CDF242B8EE900171882 /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		B5632CE1242B8F4700171882 /* MarvelImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarvelImage.swift; sourceTree = "<group>"; };
 		B5632CE3242B913300171882 /* Comic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comic.swift; sourceTree = "<group>"; };
+		B5632CE6242B94AB00171882 /* MarvelAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarvelAPIClient.swift; sourceTree = "<group>"; };
+		B5632CE8242B955C00171882 /* MarvelAPICredentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarvelAPICredentials.swift; sourceTree = "<group>"; };
+		B5632D80242B982700171882 /* String+Crypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Crypto.swift"; sourceTree = "<group>"; };
+		B5632D82242BB3FF00171882 /* MarvelAPIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarvelAPIConstants.swift; sourceTree = "<group>"; };
 		CA501DBE8A10B300F001F0A4 /* Pods-HeroSquad.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HeroSquad.release.xcconfig"; path = "Target Support Files/Pods-HeroSquad/Pods-HeroSquad.release.xcconfig"; sourceTree = "<group>"; };
 		F114C44D0E323DA83C641D91 /* Pods-HeroSquadTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HeroSquadTests.debug.xcconfig"; path = "Target Support Files/Pods-HeroSquadTests/Pods-HeroSquadTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -169,6 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				B521954D242A3EFD000344D5 /* Encodable+JSON.swift */,
+				B5632D80242B982700171882 /* String+Crypto.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -192,6 +201,7 @@
 		B5632CDB242B8D9100171882 /* Heroes */ = {
 			isa = PBXGroup;
 			children = (
+				B5632CE5242B949B00171882 /* Services */,
 				B5632CDC242B8DA200171882 /* Models */,
 			);
 			path = Heroes;
@@ -206,6 +216,16 @@
 				B5632CE3242B913300171882 /* Comic.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		B5632CE5242B949B00171882 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B5632CE6242B94AB00171882 /* MarvelAPIClient.swift */,
+				B5632CE8242B955C00171882 /* MarvelAPICredentials.swift */,
+				B5632D82242BB3FF00171882 /* MarvelAPIConstants.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -397,13 +417,17 @@
 				B5219687242B8270000344D5 /* ServicesContainer.swift in Sources */,
 				B521954B242A3B5B000344D5 /* URLSession+Networking.swift in Sources */,
 				B5219547242A3872000344D5 /* Endpoint.swift in Sources */,
+				B5632CE7242B94AB00171882 /* MarvelAPIClient.swift in Sources */,
+				B5632CE9242B955C00171882 /* MarvelAPICredentials.swift in Sources */,
 				B521954E242A3EFD000344D5 /* Encodable+JSON.swift in Sources */,
 				B52193F9242A19BF000344D5 /* AppDelegate.swift in Sources */,
 				B5219549242A3A81000344D5 /* NetworkingClient.swift in Sources */,
+				B5632D81242B982700171882 /* String+Crypto.swift in Sources */,
 				B5632CE4242B913300171882 /* Comic.swift in Sources */,
 				B52195E9242AB0CD000344D5 /* AppController.swift in Sources */,
 				B5632CE2242B8F4700171882 /* MarvelImage.swift in Sources */,
 				B5632CDE242B8DBF00171882 /* DataWrapper.swift in Sources */,
+				B5632D83242BB3FF00171882 /* MarvelAPIConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

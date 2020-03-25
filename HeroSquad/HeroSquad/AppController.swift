@@ -3,9 +3,11 @@ import UIKit
 final class AppController {
     
     private let window: UIWindow
+    private let container: Services
     
-    init(window: UIWindow) {
+    init(window: UIWindow, container: Services) {
         self.window = window
+        self.container = container
     }
     
     func start() {

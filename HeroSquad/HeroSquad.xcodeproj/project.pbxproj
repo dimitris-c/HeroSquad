@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,7 @@
 		B521954E242A3EFD000344D5 /* Encodable+JSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = B521954D242A3EFD000344D5 /* Encodable+JSON.swift */; };
 		B5219551242A5C6A000344D5 /* NetworkingClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5219550242A5C6A000344D5 /* NetworkingClientTests.swift */; };
 		B52195E9242AB0CD000344D5 /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B52195E8242AB0CD000344D5 /* AppController.swift */; };
+		B5219687242B8270000344D5 /* ServicesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5219686242B8270000344D5 /* ServicesContainer.swift */; };
 		E1DAD05E03D9CE5B7C62B301 /* Pods_HeroSquadTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DD5B0D57AB143D0587D7EC1 /* Pods_HeroSquadTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +49,7 @@
 		B521954D242A3EFD000344D5 /* Encodable+JSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+JSON.swift"; sourceTree = "<group>"; };
 		B5219550242A5C6A000344D5 /* NetworkingClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingClientTests.swift; sourceTree = "<group>"; };
 		B52195E8242AB0CD000344D5 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
+		B5219686242B8270000344D5 /* ServicesContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServicesContainer.swift; sourceTree = "<group>"; };
 		CA501DBE8A10B300F001F0A4 /* Pods-HeroSquad.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HeroSquad.release.xcconfig"; path = "Target Support Files/Pods-HeroSquad/Pods-HeroSquad.release.xcconfig"; sourceTree = "<group>"; };
 		F114C44D0E323DA83C641D91 /* Pods-HeroSquadTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HeroSquadTests.debug.xcconfig"; path = "Target Support Files/Pods-HeroSquadTests/Pods-HeroSquadTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -89,7 +91,6 @@
 				F114C44D0E323DA83C641D91 /* Pods-HeroSquadTests.debug.xcconfig */,
 				3E2579F777247C737441272A /* Pods-HeroSquadTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -138,6 +139,7 @@
 		B5219544242A37FD000344D5 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				B5219686242B8270000344D5 /* ServicesContainer.swift */,
 				B521954C242A3EEE000344D5 /* Extensions */,
 				B5219545242A3805000344D5 /* Networking */,
 			);
@@ -355,6 +357,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5219687242B8270000344D5 /* ServicesContainer.swift in Sources */,
 				B521954B242A3B5B000344D5 /* URLSession+Networking.swift in Sources */,
 				B5219547242A3872000344D5 /* Endpoint.swift in Sources */,
 				B521954E242A3EFD000344D5 /* Encodable+JSON.swift in Sources */,

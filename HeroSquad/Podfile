@@ -1,0 +1,16 @@
+platform :ios, '12.0'
+
+target 'HeroSquad' do
+
+  use_frameworks!
+
+  pod 'RxSwift'
+  pod 'RxCocoa'
+
+  target 'HeroSquadTests' do
+    inherit! :search_paths
+    pod 'RxTest'
+    pod 'RxBlocking'
+  end
+
+end

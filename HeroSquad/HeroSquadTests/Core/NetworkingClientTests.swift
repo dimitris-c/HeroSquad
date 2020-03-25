@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
+import RxBlocking
 import XCTest
 @testable import HeroSquad
 
@@ -101,5 +104,12 @@ class MockNetworkingSession: NetworkingSession {
         if let response = response, let data = data {
             completion(.success((response, data)))
         }
+    }
+    
+    func response(request: URLRequest) -> Observable<(response: HTTPURLResponse, data: Data)> {
+        if let response = response, let data = data {
+            return .just((response, data))
+        }
+        return .error(error ?? NetworkError.unknown)
     }
 }

@@ -10,7 +10,8 @@ final class HeroesWireframe {
     
     func prepareModule() -> UINavigationController {
         
-        let viewModel = HeroesViewModel(marvelApiClient: self.marvelApiClient)
+        let pagination = PaginationService()
+        let viewModel = HeroesViewModel(marvelApiClient: self.marvelApiClient, pagination: pagination)
         let viewController = HeroesViewController(viewModel: viewModel)
         
         let navigationController = UINavigationController(rootViewController: viewController)

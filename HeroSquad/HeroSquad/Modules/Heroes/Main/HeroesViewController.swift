@@ -1,7 +1,15 @@
 import UIKit
+import RxSwift
+import RxCocoa
 
 final class HeroesViewController: UIViewController {
 
+    private let disposeBag = DisposeBag()
+    
+    private let heroesList: HeroesListViewController = {
+        return HeroesListViewController()
+    }()
+    
     private let viewModel: HeroesViewModelType
     
     init(viewModel: HeroesViewModelType) {
@@ -18,6 +26,7 @@ final class HeroesViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
+        setupBindings()
     }
     
     func setupUI() {
@@ -26,7 +35,34 @@ final class HeroesViewController: UIViewController {
         self.navigationItem.titleView = UIImageView(image: UIImage(named: "marvel-logo"))
         self.view.backgroundColor = DesignStyling.Colours.darkBlueGray
         
+        self.addChild(self.heroesList)
+        self.view.addSubview(self.heroesList.view)
+        self.heroesList.didMove(toParent: self)
+        
+        NSLayoutConstraint.activate([
+            heroesList.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            heroesList.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            heroesList.view.widthAnchor.constraint(equalTo: view.widthAnchor),
+            heroesList.view.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            ])
         
     }
     
+    func setupBindings() {
+        
+        self.viewModel.heroes.drive(
+            self.heroesList.collectionView.rx.items(cellIdentifier: HeroCollectionViewCell.identifier, cellType: HeroCollectionViewCell.self)) { row, item, cell in
+                cell.configure(with: item)
+        }.disposed(by: disposeBag)
+                rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
+            .map { _ in }
+            .bind(to: self.viewModel.viewLoaded)
+            .disposed(by: disposeBag)
+        
+        
+        self.heroesList.collectionView.rx.reachedBottom
+            .map { _ in }
+            .bind(to: self.viewModel.nextPageTriggered)
+            .disposed(by: disposeBag)
+    }
 }

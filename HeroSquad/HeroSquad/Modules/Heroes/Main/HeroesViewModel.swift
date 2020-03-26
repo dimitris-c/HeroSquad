@@ -2,15 +2,24 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-struct HeroDisplayItem {
-    let imageUrl: URL?
-    let name: String
-    let id: Int
+struct HeroDisplayItemViewModel {
+    private let character: Character
+    private let imageService: ImageServiceType
     
-    init(from character: Character) {
-        self.imageUrl = character.thumbnail.imageUrl
-        self.name = character.name
-        self.id = character.id
+    var name: String { character.name }
+    
+    var id: Int { character.id }
+    
+    init(from character: Character, imageService: ImageServiceType) {
+        self.character = character
+        self.imageService = imageService
+    }
+    
+    func loadImage(with size: ImageSize) -> Driver<UIImage?> {
+        let imageUrl = self.character.thumbnail.imageUrl(with: size)
+        return self.imageService
+            .loadImage(url: imageUrl)
+            .asDriver(onErrorJustReturn: nil)
     }
 }
 
@@ -20,7 +29,7 @@ protocol HeroesViewModelType {
     var nextPageTriggered: PublishRelay<Void> { get }
     
     // Outputs
-    var heroes: Driver<[HeroDisplayItem]> { get }
+    var heroes: Driver<[HeroDisplayItemViewModel]> { get }
 }
 
 final class HeroesViewModel: HeroesViewModelType {
@@ -29,14 +38,14 @@ final class HeroesViewModel: HeroesViewModelType {
     let nextPageTriggered = PublishRelay<Void>()
     
     // MARK: Outputs
-    let heroes: Driver<[HeroDisplayItem]>
+    let heroes: Driver<[HeroDisplayItemViewModel]>
     
     private let marvelApiClient: MarvelAPI
     private let pagination: Pagination
     
     let loading = PublishRelay<Bool>()
     
-    init(marvelApiClient: MarvelAPI, pagination: Pagination) {
+    init(marvelApiClient: MarvelAPI, pagination: Pagination, imageService: ImageServiceType) {
         self.marvelApiClient = marvelApiClient
         self.pagination = pagination
         
@@ -48,8 +57,10 @@ final class HeroesViewModel: HeroesViewModelType {
                                           query: query,
                                           refreshTrigger: viewLoaded.asObservable().map { _ in },
                                           nextPageTrigger: nextPageTriggered.asObservable().map { _ in })
-            .scan(into: [HeroDisplayItem](), accumulator: { (values, pageData) in
-                let converted = pageData.element.data.results.map(HeroDisplayItem.init(from:))
+            .scan(into: [HeroDisplayItemViewModel](), accumulator: { (values, pageData) in
+                let converted = pageData.element.data.results.map { character -> HeroDisplayItemViewModel in
+                    return HeroDisplayItemViewModel(from: character, imageService: imageService)
+                }
                 values = pageData.page == 0 ? converted : values + converted
             })
             .asDriver(onErrorJustReturn: [])

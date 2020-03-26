@@ -1,7 +1,11 @@
 import UIKit
+import RxSwift
+import RxCocoa
 
 class HeroCollectionViewCell: UICollectionViewCell {
     static let identifier = "hero.list.cell.id"
+    
+    private var disposeBag = DisposeBag()
     
     private let background: UIView = {
         let view = UIView()
@@ -72,13 +76,18 @@ class HeroCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func configure(with item: HeroDisplayItem) {
+    func configure(with item: HeroDisplayItemViewModel) {
         self.titleLabel.text = item.name
+        
+        item.loadImage(with: .small(aspectRatio: .square))
+            .drive(self.imageView.rx.image)
+            .disposed(by: disposeBag)
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         titleLabel.text = nil
-
+        imageView.image = nil
+        disposeBag = DisposeBag()
     }
 }

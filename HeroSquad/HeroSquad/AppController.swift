@@ -26,7 +26,7 @@ final class AppController {
         let marvelAPIClient = MarvelAPIClient(networking: self.container.networkingClient,
                                               credentials: credentials,
                                               baseURL: MarvelAPIConfig.gateway.baseURL!)
-        let heroesWireframe = HeroesWireframe(marvelApiClient: marvelAPIClient)
+        let heroesWireframe = HeroesWireframe(marvelApiClient: marvelAPIClient, imageService: container.imageService)
         return heroesWireframe.prepareModule()
     }
 }

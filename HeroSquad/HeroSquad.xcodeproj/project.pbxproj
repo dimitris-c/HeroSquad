@@ -34,6 +34,7 @@
 		B5632E25242BE17F00171882 /* DesignStyling.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5632E24242BE17F00171882 /* DesignStyling.swift */; };
 		B5D673CB242D16D800BDB1AB /* Pagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D673CA242D16D800BDB1AB /* Pagination.swift */; };
 		B5D673CD242D312B00BDB1AB /* UIscrollView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D673CC242D312B00BDB1AB /* UIscrollView+Rx.swift */; };
+		B5D673D1242D4EEE00BDB1AB /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D673D0242D4EEE00BDB1AB /* ImageService.swift */; };
 		E1DAD05E03D9CE5B7C62B301 /* Pods_HeroSquadTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DD5B0D57AB143D0587D7EC1 /* Pods_HeroSquadTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -82,6 +83,7 @@
 		B5632E24242BE17F00171882 /* DesignStyling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignStyling.swift; sourceTree = "<group>"; };
 		B5D673CA242D16D800BDB1AB /* Pagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pagination.swift; sourceTree = "<group>"; };
 		B5D673CC242D312B00BDB1AB /* UIscrollView+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIscrollView+Rx.swift"; sourceTree = "<group>"; };
+		B5D673D0242D4EEE00BDB1AB /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		CA501DBE8A10B300F001F0A4 /* Pods-HeroSquad.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HeroSquad.release.xcconfig"; path = "Target Support Files/Pods-HeroSquad/Pods-HeroSquad.release.xcconfig"; sourceTree = "<group>"; };
 		F114C44D0E323DA83C641D91 /* Pods-HeroSquadTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HeroSquadTests.debug.xcconfig"; path = "Target Support Files/Pods-HeroSquadTests/Pods-HeroSquadTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -175,6 +177,7 @@
 				B5219686242B8270000344D5 /* ServicesContainer.swift */,
 				B521954C242A3EEE000344D5 /* Extensions */,
 				B5219545242A3805000344D5 /* Networking */,
+				B5D673D0242D4EEE00BDB1AB /* ImageService.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -486,6 +489,7 @@
 				B5219549242A3A81000344D5 /* NetworkingClient.swift in Sources */,
 				B5632E25242BE17F00171882 /* DesignStyling.swift in Sources */,
 				B5632D81242B982700171882 /* String+Crypto.swift in Sources */,
+				B5D673D1242D4EEE00BDB1AB /* ImageService.swift in Sources */,
 				B5632CE4242B913300171882 /* Comic.swift in Sources */,
 				B52195E9242AB0CD000344D5 /* AppController.swift in Sources */,
 				B5632CE2242B8F4700171882 /* MarvelImage.swift in Sources */,

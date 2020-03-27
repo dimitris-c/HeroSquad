@@ -1,5 +1,6 @@
 import Foundation
 import RxSwift
+import RxCocoa
 
 typealias NetworkCompletion<Response> = (Result<(response: HTTPURLResponse, result: Response), Error>) -> Void
 protocol Networking {
@@ -13,8 +14,9 @@ final class NetworkingClient: Networking {
     
     private let session: NetworkingSession
     
-    init(session: NetworkingSession = URLSession.shared) {
+    init(session: NetworkingSession = URLSession.shared, logging: Bool = false) {
         self.session = session
+        Logging.URLRequests = { _ in logging }
     }
     
     func request<Response>(_ endpoint: Endpoint<Response>, baseURL: URL, completion: @escaping NetworkCompletion<Response>) {

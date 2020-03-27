@@ -3,7 +3,7 @@ import RxSwift
 import RxCocoa
 
 struct HeroDisplayItemViewModel {
-    private let character: Character
+    let character: Character
     private let imageService: ImageServiceType
     
     var name: String { character.name }
@@ -27,27 +27,34 @@ protocol HeroesViewModelType {
     // Inputs
     var viewLoaded: PublishRelay<Void> { get }
     var nextPageTriggered: PublishRelay<Void> { get }
+    var heroSelected: PublishRelay<HeroDisplayItemViewModel> { get }
     
     // Outputs
     var heroes: Driver<[HeroDisplayItemViewModel]> { get }
 }
 
 final class HeroesViewModel: HeroesViewModelType {
+    
     // MARK: Inputs
     let viewLoaded = PublishRelay<Void>()
     let nextPageTriggered = PublishRelay<Void>()
+    let heroSelected = PublishRelay<HeroDisplayItemViewModel>()
     
     // MARK: Outputs
     let heroes: Driver<[HeroDisplayItemViewModel]>
+    
+    // MARK: Route
+    let navigable: HeroesNavigable
     
     private let marvelApiClient: MarvelAPI
     private let pagination: Pagination
     
     let loading = PublishRelay<Bool>()
     
-    init(marvelApiClient: MarvelAPI, pagination: Pagination, imageService: ImageServiceType) {
+    init(marvelApiClient: MarvelAPI, pagination: Pagination, imageService: ImageServiceType, navigable: HeroesNavigable) {
         self.marvelApiClient = marvelApiClient
         self.pagination = pagination
+        self.navigable = navigable
         
         let query: (Int, Int) -> Observable<DataWrapper<Character>> = { limit, offset -> Observable<DataWrapper<Character>> in
             return marvelApiClient.getCharacters(limit: limit, offset: offset).asObservable()
@@ -65,8 +72,11 @@ final class HeroesViewModel: HeroesViewModelType {
             })
             .asDriver(onErrorJustReturn: [])
             
-       
-            
+        let displayHero = heroSelected
+            .map { HeroesFlow.displayHero(character: $0.character) }
+            .asSignal(onErrorSignalWith: .empty())
+        
+        navigable.route(to: displayHero)
     }
     
 }

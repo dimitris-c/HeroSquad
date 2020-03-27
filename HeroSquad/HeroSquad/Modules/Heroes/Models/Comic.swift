@@ -19,3 +19,9 @@ struct ComicSummary: Decodable {
         return resourceURL?.path
     }
 }
+
+struct Comic: Decodable {
+    let title: String
+    let id: Int
+    let thumbnail: MarvelImage
+}

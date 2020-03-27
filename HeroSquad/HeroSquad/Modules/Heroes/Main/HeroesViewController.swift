@@ -6,7 +6,7 @@ final class HeroesViewController: UIViewController {
 
     private let disposeBag = DisposeBag()
     
-    private let heroesList: HeroesListViewController = {
+    private lazy var heroesList: HeroesListViewController = {
         return HeroesListViewController()
     }()
     
@@ -30,10 +30,11 @@ final class HeroesViewController: UIViewController {
     }
     
     func setupUI() {
-        self.navigationController?.navigationBar.barTintColor = DesignStyling.Colours.darkBlueGray
-        self.navigationController?.navigationBar.isTranslucent = false
-        self.navigationItem.titleView = UIImageView(image: UIImage(named: "marvel-logo"))
         self.view.backgroundColor = DesignStyling.Colours.darkBlueGray
+        self.navigationItem.titleView = UIImageView(image: UIImage(named: "marvel-logo"))
+        self.navigationController?.navigationBar.backIndicatorImage = UIImage(named: "icon_back")
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "icon_back")
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
         self.addChild(self.heroesList)
         self.view.addSubview(self.heroesList.view)
@@ -48,13 +49,21 @@ final class HeroesViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.barTintColor = DesignStyling.Colours.darkBlueGray
+        self.navigationController?.navigationBar.isTranslucent = false
+    }
+    
     func setupBindings() {
         
         self.viewModel.heroes.drive(
             self.heroesList.collectionView.rx.items(cellIdentifier: HeroCollectionViewCell.identifier, cellType: HeroCollectionViewCell.self)) { row, item, cell in
                 cell.configure(with: item)
         }.disposed(by: disposeBag)
-                rx.sentMessage(#selector(UIViewController.viewWillAppear(_:)))
+            
+        rx.sentMessage(#selector(UIViewController.viewDidAppear(_:)))
+            .take(1)
             .map { _ in }
             .bind(to: self.viewModel.viewLoaded)
             .disposed(by: disposeBag)
@@ -64,5 +73,11 @@ final class HeroesViewController: UIViewController {
             .map { _ in }
             .bind(to: self.viewModel.nextPageTriggered)
             .disposed(by: disposeBag)
+        
+        self.heroesList.collectionView.rx
+            .modelSelected(HeroDisplayItemViewModel.self)
+            .bind(to: self.viewModel.heroSelected)
+            .disposed(by: disposeBag)
+            
     }
 }

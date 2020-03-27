@@ -31,6 +31,7 @@ final class HeroesListViewController: UIViewController {
     }
     
     func setupUI() {
+        self.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.backgroundColor = DesignStyling.Colours.darkBlueGray
         
         self.collectionView.delegate = self
@@ -38,7 +39,7 @@ final class HeroesListViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             collectionView.widthAnchor.constraint(equalTo: view.widthAnchor),
             collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])

@@ -8,6 +8,7 @@ struct PageData<Element> {
 }
 
 protocol Pagination {
+    var loading: Driver<Bool> { get }
     func paginate<Element>(
         limit: Int,
         query: @escaping (_ limit: Int, _ offset: Int) -> Observable<Element>,
@@ -18,10 +19,16 @@ protocol Pagination {
 
 final class PaginationService: Pagination {
     
-    let loading = BehaviorSubject<Bool>(value: false)
+    let loading: Driver<Bool>
+    
+    private let innerLoading = BehaviorSubject<Bool>(value: false)
     
     private var currentPage = 0
     private let disposeBag = DisposeBag()
+    
+    init() {
+        self.loading = innerLoading.asDriver(onErrorJustReturn: false)
+    }
 
     func paginate<Element>(
         limit: Int,
@@ -29,7 +36,7 @@ final class PaginationService: Pagination {
         refreshTrigger: Observable<Void>,
         nextPageTrigger: Observable<Void>
     ) -> Observable<PageData<Element>> {
-        let refreshRequest = loading.asObservable()
+        let refreshRequest = innerLoading.asObservable()
             .sample(refreshTrigger)
             .flatMap { [weak self] loading -> Observable<Element> in
                 guard let self = self else { return .empty() }
@@ -42,7 +49,7 @@ final class PaginationService: Pagination {
                 }
             }
         
-        let nextPageRequest = loading.asObservable()
+        let nextPageRequest = innerLoading.asObservable()
             .sample(nextPageTrigger)
             .flatMap { [weak self] loading -> Observable<Element> in
                 guard let self = self else { return .empty() }
@@ -60,9 +67,9 @@ final class PaginationService: Pagination {
             .of(request.map { _ in true },
                 request.catchError { _ in .empty() }.map { _ in false })
             .merge()
-            .bind(to: loading)
+            .bind(to: innerLoading)
             .disposed(by: disposeBag)
-        
+                
         return request.flatMap { [weak self] value -> Observable<PageData<Element>> in
             guard let self = self else { return .empty() }
             return .just(PageData(page: self.currentPage, element: value))

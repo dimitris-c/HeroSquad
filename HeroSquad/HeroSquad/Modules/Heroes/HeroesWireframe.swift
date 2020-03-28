@@ -14,11 +14,13 @@ final class HeroesWireframe: HeroesNavigable {
     
     private let marvelApiClient: MarvelAPI
     private let imageService: ImageServiceType
+    private let persistence: MySquadPersistenceLayer
     private var navigationController: UINavigationController?
     
-    init(marvelApiClient: MarvelAPI, imageService: ImageServiceType) {
+    init(marvelApiClient: MarvelAPI, imageService: ImageServiceType, persistence: MySquadPersistenceLayer) {
         self.marvelApiClient = marvelApiClient
         self.imageService = imageService
+        self.persistence = persistence
     }
     
     func prepareModule() -> UINavigationController {
@@ -50,7 +52,8 @@ final class HeroesWireframe: HeroesNavigable {
         let viewModel = CharacterDetailsViewModel(character: .just(character),
                                                   maxLastAppearItems: 2,
                                                   networking: self.marvelApiClient,
-                                                  imageService: self.imageService)
+                                                  imageService: self.imageService,
+                                                  persistence: self.persistence)
         let viewController = CharacterDetailsViewController(viewModel: viewModel)
         
         self.navigationController?.pushViewController(viewController, animated: true)

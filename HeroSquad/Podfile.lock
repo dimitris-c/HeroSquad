@@ -1,4 +1,9 @@
 PODS:
+  - Realm (4.3.2):
+    - Realm/Headers (= 4.3.2)
+  - Realm/Headers (4.3.2)
+  - RealmSwift (4.3.2):
+    - Realm (= 4.3.2)
   - RxBlocking (5.1.0):
     - RxSwift (~> 5)
   - RxCocoa (5.1.0):
@@ -11,6 +16,7 @@ PODS:
     - RxSwift (~> 5)
 
 DEPENDENCIES:
+  - RealmSwift
   - RxBlocking
   - RxCocoa
   - RxSwift
@@ -18,6 +24,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Realm
+    - RealmSwift
     - RxBlocking
     - RxCocoa
     - RxRelay
@@ -25,12 +33,14 @@ SPEC REPOS:
     - RxTest
 
 SPEC CHECKSUMS:
+  Realm: 5e92902e2875dff4bb0fd02f67bb737c3d5db2bc
+  RealmSwift: 9a360fc7bae04fc2e308a34fbd899d5faa2d6b22
   RxBlocking: 5ef131267220f92ef68531dd6afeaf407cd6b41a
   RxCocoa: 13d2a4d7546a34b8ececae8c281e4ea1dbb94f2b
   RxRelay: a168bd6caf712d00c676ac344e9295afc93b418e
   RxSwift: ad5874f24bb0dbffd1e9bb8443604e3578796c7a
   RxTest: d5e1c9c1880de2751041fa485d476ce006967b31
 
-PODFILE CHECKSUM: 21749166d3169d2685d890681de0ba94c10f6edd
+PODFILE CHECKSUM: 3b2bcd98ec35f0cc4037052a629a6fc6d3f2cd5f
 
 COCOAPODS: 1.9.1

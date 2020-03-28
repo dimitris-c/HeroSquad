@@ -14,6 +14,11 @@ struct ComicDisplayItem {
 }
 
 protocol CharacterDetailsViewModelType {
+    // Inputs
+    var addRemoveFromSquadTrigger: PublishRelay<Void> { get }
+    var confirmedFireFromSquad: PublishRelay<Bool> { get }
+    
+    // Outputs
     var characterImage: Driver<UIImage?> { get }
     var characterName: Driver<String> { get }
     var characterDescription: Driver<String> { get }
@@ -21,9 +26,14 @@ protocol CharacterDetailsViewModelType {
     var latestComics: Driver<(left: ComicDisplayItem?, right: ComicDisplayItem?)> { get }
     var moreComicsTitle: Driver<String> { get }
     var showsMoreComicsSection: Driver<Bool> { get }
+    var characterRecruited: Driver<Bool> { get }
+    var confirmToFireFromSquad: Driver<Bool> { get }
 }
 
 final class CharacterDetailsViewModel: CharacterDetailsViewModelType {
+    let addRemoveFromSquadTrigger = PublishRelay<Void>()
+    let confirmedFireFromSquad = PublishRelay<Bool>()
+    
     let characterImage: Driver<UIImage?>
     let characterName: Driver<String>
     let characterDescription: Driver<String>
@@ -32,7 +42,56 @@ final class CharacterDetailsViewModel: CharacterDetailsViewModelType {
     let moreComicsTitle: Driver<String>
     let showsMoreComicsSection: Driver<Bool>
     
-    init(character: Driver<Character>, maxLastAppearItems: Int, networking: MarvelAPI, imageService: ImageServiceType) {
+    let characterRecruited: Driver<Bool>
+    let confirmToFireFromSquad: Driver<Bool>
+    
+    init(character: Driver<Character>,
+         maxLastAppearItems: Int,
+         networking: MarvelAPI,
+         imageService: ImageServiceType,
+         persistence: MySquadPersistenceLayer) {
+        
+        let isRecruited = character
+            .map { $0.id }
+            .map { persistence.exists(characterId: $0) }
+        
+        let recruitOrFireTrigger = addRemoveFromSquadTrigger
+            .withLatestFrom(character)
+            .flatMap { character -> Observable<Bool> in
+                let exists = persistence.exists(characterId: character.id)
+                return Observable.just(exists).scan(exists) { (lastestValue, prev) -> Bool in
+                    return !lastestValue
+                }
+            }.share()
+        
+        let recruit = recruitOrFireTrigger
+            .filter { $0 }
+            .withLatestFrom(character)
+            .flatMap { character -> Observable<Bool> in
+                if !persistence.exists(characterId: character.id) {
+                    persistence.add(character: character)
+                    return .just(true)
+                }
+                return .just(false)
+            }.asDriver(onErrorJustReturn: false)
+        
+        let confirmation = self.confirmedFireFromSquad
+        
+        let fire = recruitOrFireTrigger.filter { !$0 }
+            .withLatestFrom(character)
+            .flatMap { character -> Observable<Bool> in
+                return confirmation.flatMap { shouldFire -> Observable<Bool> in
+                    if shouldFire && persistence.exists(characterId: character.id) {
+                        persistence.remove(characterId: character.id)
+                        return .just(false)
+                    }
+                    return .just(true)
+                }
+            }.asDriver(onErrorJustReturn: false)
+        
+        confirmToFireFromSquad = recruitOrFireTrigger.filter { !$0 }.asDriver(onErrorJustReturn: false)
+        
+        characterRecruited = Driver<Bool>.merge(isRecruited, recruit, fire)
         
         characterImage = character.flatMapLatest({ character -> Driver<UIImage?> in
             let url = character.thumbnail.imageUrl(with: .xtraLarge(aspectRatio: .square))

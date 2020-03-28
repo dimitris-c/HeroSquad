@@ -48,6 +48,7 @@ final class AddToSquadButton: UIButton {
             self.innerView.layer.borderWidth = 3
         } else {
             self.innerView.backgroundColor = isHighlighted ? DesignStyling.Colours.darkRed : DesignStyling.Colours.red
+            self.innerView.layer.borderWidth = 0
         }
         
         self.innerView.transform = self.isHighlighted ? CGAffineTransform(scaleX: 0.98, y: 0.98) : CGAffineTransform(scaleX: 1, y: 1)

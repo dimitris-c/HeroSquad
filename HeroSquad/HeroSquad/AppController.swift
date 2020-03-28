@@ -1,6 +1,6 @@
 import UIKit
 import RxSwift
-
+import RealmSwift
 final class AppController {
     
     private let window: UIWindow
@@ -14,6 +14,8 @@ final class AppController {
     func start() {
         self.window.rootViewController = buildMain()
         self.window.makeKeyAndVisible()
+        
+        print(Realm.Configuration.defaultConfiguration.fileURL?.absoluteString)
     }
     
     
@@ -26,7 +28,9 @@ final class AppController {
         let marvelAPIClient = MarvelAPIClient(networking: self.container.networkingClient,
                                               credentials: credentials,
                                               baseURL: MarvelAPIConfig.gateway.baseURL!)
-        let heroesWireframe = HeroesWireframe(marvelApiClient: marvelAPIClient, imageService: container.imageService)
+        let heroesWireframe = HeroesWireframe(marvelApiClient: marvelAPIClient,
+                                              imageService: container.imageService,
+                                              persistence: container.mySquadPersistence)
         return heroesWireframe.prepareModule()
     }
 }

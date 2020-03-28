@@ -163,9 +163,40 @@ final class CharacterDetailsViewController: UIViewController {
             .drive(lastAppearedIn.rx.isHidden)
             .disposed(by: disposeBag)
         
+        addToSquadButton.rx.tap
+            .bind(to: viewModel.addRemoveFromSquadTrigger)
+            .disposed(by: disposeBag)
+        
+        viewModel.characterRecruited
+            .drive(addToSquadButton.rx.isSelected)
+            .disposed(by: disposeBag)
+        
+        viewModel.confirmToFireFromSquad.asObservable()
+            .flatMap { [weak self] value -> Observable<Bool> in
+                guard let self = self else { return .empty() }
+                return self.displayDeleteConfirmation()
+            }
+        .bind(to: viewModel.confirmedFireFromSquad)
+            .disposed(by: disposeBag)
+        
         lastAppearedIn.configure(comics: viewModel.latestComics.asDriver(),
                                  showsMoreComicsSections: viewModel.showsMoreComicsSection,
                                  moreComicsTitle: viewModel.moreComicsTitle)
         
+    }
+    
+    private func displayDeleteConfirmation() -> Observable<Bool> {
+        let subject = PublishRelay<Bool>()
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: "Fire them!", style: .destructive) { action in
+            subject.accept(true)
+        }
+        let cancelAction = UIAlertAction(title: "Nope, keep 'em!", style: .cancel) { action in
+            subject.accept(false)
+        }
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+        return subject.asObservable()
     }
 }

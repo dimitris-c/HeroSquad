@@ -1,4 +1,5 @@
 import Foundation
+import RealmSwift
 
 enum ImageAspectRatio: String {
     case portait
@@ -46,5 +47,22 @@ struct MarvelImage: Decodable {
         }
         let urlString = "\(self.path)/\(size.value)/.\(self.extension)"
         return URL(string: urlString)
+    }
+    
+//    init(from realmObject: RLMMarvelImage) {
+//        self.path = realmObject.path
+//        self.extension = realmObject.extension
+//    }
+}
+
+class RLMMarvelImage: Object {
+    @objc dynamic var path: String = ""
+    @objc dynamic var `extension`: String = ""
+
+    class func object(from marvelImage: MarvelImage) -> RLMMarvelImage {
+        let object = RLMMarvelImage()
+        object.path = marvelImage.path
+        object.extension = marvelImage.extension
+        return object
     }
 }

@@ -49,10 +49,7 @@ struct MarvelImage: Decodable {
         return URL(string: urlString)
     }
     
-//    init(from realmObject: RLMMarvelImage) {
-//        self.path = realmObject.path
-//        self.extension = realmObject.extension
-//    }
+    static let empty = MarvelImage(path: "", extension: "")
 }
 
 class RLMMarvelImage: Object {

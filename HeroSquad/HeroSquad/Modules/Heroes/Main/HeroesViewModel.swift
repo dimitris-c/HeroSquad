@@ -31,6 +31,8 @@ protocol HeroesViewModelType {
     
     // Outputs
     var heroes: Driver<[HeroDisplayItemViewModel]> { get }
+    var showsMySquad: Driver<Bool> { get }
+    var mySquadHeroes: Driver<[HeroDisplayItemViewModel]> { get }
 }
 
 final class HeroesViewModel: HeroesViewModelType {
@@ -42,6 +44,8 @@ final class HeroesViewModel: HeroesViewModelType {
     
     // MARK: Outputs
     let heroes: Driver<[HeroDisplayItemViewModel]>
+    let showsMySquad: Driver<Bool>
+    let mySquadHeroes: Driver<[HeroDisplayItemViewModel]>
     
     // MARK: Route
     let navigable: HeroesNavigable
@@ -51,7 +55,11 @@ final class HeroesViewModel: HeroesViewModelType {
     
     let loading = PublishRelay<Bool>()
     
-    init(marvelApiClient: MarvelAPI, pagination: Pagination, imageService: ImageServiceType, navigable: HeroesNavigable) {
+    init(marvelApiClient: MarvelAPI,
+         pagination: Pagination,
+         imageService: ImageServiceType,
+         persistence: MySquadPersistenceLayer,
+         navigable: HeroesNavigable) {
         self.marvelApiClient = marvelApiClient
         self.pagination = pagination
         self.navigable = navigable
@@ -77,6 +85,19 @@ final class HeroesViewModel: HeroesViewModelType {
             .asSignal(onErrorSignalWith: .empty())
         
         navigable.route(to: displayHero)
+        
+        let mySquad = Observable.results(from: persistence.mySquad()).share()
+            .share()
+        
+        showsMySquad = mySquad
+                .map { $0.count > 0 }
+                .map { !$0 } // negate for isHidden
+                .asDriver(onErrorDriveWith: .empty())
+        
+        mySquadHeroes = mySquad
+            .map { results in
+                results.map { HeroDisplayItemViewModel(from: Character.object(from: $0), imageService: imageService) }
+            }.asDriver(onErrorDriveWith: .empty())
     }
     
 }

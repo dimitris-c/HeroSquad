@@ -67,14 +67,6 @@ final class CharacterDetailsViewController: UIViewController {
         return label
     }()
     
-//    private lazy var activityIndicator: UIActivityIndicatorView = {
-//        let view = UIActivityIndicatorView(style: .whiteLarge)
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        view.color = UIColor.darkGray
-//        view.hidesWhenStopped = true
-//        return view
-//    }()
-    
     private lazy var lastAppearedIn = LastAppearedInView()
     
     init(viewModel: CharacterDetailsViewModel) {

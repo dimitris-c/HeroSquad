@@ -29,6 +29,7 @@ final class HeroesWireframe: HeroesNavigable {
         let viewModel = HeroesViewModel(marvelApiClient: self.marvelApiClient,
                                         pagination: pagination,
                                         imageService: imageService,
+                                        persistence: persistence,
                                         navigable: self)
         let viewController = HeroesViewController(viewModel: viewModel)
         

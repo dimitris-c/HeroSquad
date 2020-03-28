@@ -14,9 +14,7 @@ final class AppController {
     func start() {
         self.window.rootViewController = buildMain()
         self.window.makeKeyAndVisible()
-        
-        print(Realm.Configuration.defaultConfiguration.fileURL?.absoluteString)
-    }
+}
     
     
     // MARK: Private

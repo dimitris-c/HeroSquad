@@ -10,6 +10,10 @@ final class HeroesViewController: UIViewController {
         return HeroesListViewController()
     }()
     
+    private lazy var mySquadList: MySquadViewController =  {
+        return MySquadViewController()
+    }()
+    
     private let viewModel: HeroesViewModelType
     
     init(viewModel: HeroesViewModelType) {
@@ -36,15 +40,27 @@ final class HeroesViewController: UIViewController {
         self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "icon_back")
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fillProportionally
+        self.view.addSubview(stackView)
+        
+        self.addChild(self.mySquadList)
+        stackView.addArrangedSubview(self.mySquadList.view)
+        self.mySquadList.didMove(toParent: self)
+        
         self.addChild(self.heroesList)
-        self.view.addSubview(self.heroesList.view)
+        stackView.addArrangedSubview(self.heroesList.view)
         self.heroesList.didMove(toParent: self)
         
         NSLayoutConstraint.activate([
-            heroesList.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            heroesList.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            heroesList.view.widthAnchor.constraint(equalTo: view.widthAnchor),
-            heroesList.view.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            mySquadList.view.heightAnchor.constraint(equalTo: stackView.widthAnchor, multiplier: 0.45, constant: 0),
             ])
         
     }
@@ -78,6 +94,21 @@ final class HeroesViewController: UIViewController {
             .modelSelected(HeroDisplayItemViewModel.self)
             .bind(to: self.viewModel.heroSelected)
             .disposed(by: disposeBag)
+        
+        self.viewModel.showsMySquad
+            .drive(self.mySquadList.view.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        self.viewModel.mySquadHeroes.drive(
+            self.mySquadList.collectionView.rx.items(cellIdentifier: MySquadHeroCollectionViewCell.identifier, cellType: MySquadHeroCollectionViewCell.self)) { row, item, cell in
+                cell.configure(with: item)
+        }.disposed(by: disposeBag)
+        
+        self.mySquadList.collectionView.rx
+            .modelSelected(HeroDisplayItemViewModel.self)
+            .bind(to: self.viewModel.heroSelected)
+            .disposed(by: disposeBag)
             
     }
 }
+

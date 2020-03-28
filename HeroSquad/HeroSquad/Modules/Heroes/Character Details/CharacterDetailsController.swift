@@ -45,10 +45,13 @@ final class CharacterDetailsViewController: UIViewController {
         return label
     }()
     
-    private lazy var addToSquadButton: UIButton = {
-        let button = UIButton()
+    private lazy var addToSquadButton: AddToSquadButton = {
+        let button = AddToSquadButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("💪 Recruit to Squad", for: .normal)
+        button.setTitle("🔥 Fire from Squad", for: .selected)
+        button.setTitle("🔥 Fire from Squad", for: .init(arrayLiteral: [.selected, .highlighted]))
+        button.titleLabel?.font = DesignStyling.Fonts.headline
         button.contentVerticalAlignment = .center
         button.contentHorizontalAlignment = .center
         button.contentEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
